@@ -1,0 +1,40 @@
+class User:
+    rank_vector = [i for i in range(-8, 9, 1) if (i != 0)]
+
+    def __init__(self):
+        self.rank = -8
+        self.progress = 0
+
+    def inc_progress(self, kata):
+        if kata not in self.rank_vector:
+            raise ValueError("Not in the specified Range of features")
+        if self.rank == 8:
+            progressmeter = 0
+        elif self.rank_vector.index(kata) == self.rank_vector.index(self.rank):
+            progressmeter = self.progress + 3
+        elif self.rank_vector.index(kata) == self.rank_vector.index(self.rank) - 1:
+            progressmeter = self.progress + 1
+        elif self.rank_vector.index(kata) <= self.rank_vector.index(self.rank) - 2:
+            progressmeter = self.progress
+        elif self.rank == -1 and kata == 1:
+            progressmeter = self.progress + 10
+
+        else:
+            progressmeter = self.progress + 10 * pow(
+                abs(self.rank_vector.index(kata) - self.rank_vector.index(self.rank)), 2)
+        progressIndex = list(divmod(progressmeter, 100))
+        self.progress = progressIndex[1]
+        self.rank = self.updaterank(progressIndex[0])
+        if self.rank == 8:
+            self.progress = 0
+        return self.progress
+
+    def updaterank(self, level=1):
+
+        if self.rank == 8:
+            return self.rank
+        elif self.rank_vector.index(self.rank) + level > self.rank_vector.index(8):
+            self.rank = 8
+        else:
+            self.rank = self.rank_vector[self.rank_vector.index(self.rank) + level]
+        return self.rank
